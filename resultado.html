@@ -1,0 +1,52 @@
+<html>
+	<head>
+		<title>Conversor de moeda</title>
+		<meta charset="utf-8">
+		
+		<script>
+			function voltar(){
+				if (confirm("Voltar")){
+					location.href = "index.html";
+				}
+			}
+			
+			window.onload = function(){
+				chamarApi();
+			}
+			
+			function chamarApi(){
+				const endpoint = "https://api.exchangeratesapi.io/latest";
+				var request = new XMLHttpRequest();
+				request.addEventListener("load", respostaApi);
+				request.open("GET", endpoint);
+				request.send();
+			}
+			
+			function respostaApi(){
+				//console.log(this);
+				
+				var oResposta = JSON.parte(responseText);
+				var url = new URL(location.href);
+				
+				var sMoedaOrigem = url.searchParams.get("origem");
+				var sMoedaDestino = url.searchParams.get("destino");
+				var fValor = oResposta.rates[sMoedaDestino];
+				document.querySelector("#valor_destino").innerText = fValor;
+				document.querySelector("#moeda_destino").innerText = sMoedaDestino;
+			}
+		</script>
+	</head>
+	
+	<body>
+		<h1>O resultado é...</h1>
+		<p>
+			1 EUR é igual a
+			<span id="valor_destino">#valor_origem</span>
+			<span id="moeda_destino">BRL</span>
+		</p>
+		
+		<button type="button" onclick="voltar()">
+			Voltar
+		</button>
+	</body>
+</html>
